@@ -55,6 +55,13 @@ def text_to_speech(input_file, output_file="output.wav", voice="af_bella", play_
         save_audio (bool): Whether to save audio files to disk
     """
     try:
+        # Make sure output directory exists
+        if save_audio and output_file:
+            output_dir = os.path.dirname(output_file)
+            if output_dir and not os.path.exists(output_dir):
+                os.makedirs(output_dir)
+                print(f"Created output directory: {output_dir}")
+        
         # Initialize the Kokoro TTS pipeline
         print("Loading Kokoro TTS model...")
         # 'a' => American English
@@ -64,10 +71,7 @@ def text_to_speech(input_file, output_file="output.wav", voice="af_bella", play_
         print(f"Reading text from {input_file}...")
         with open(input_file, 'r', encoding='utf-8') as file:
             text = file.read()
-        
-        # Strip any whitespace from the voice parameter
-        voice = voice.strip()
-        
+
         # Generate speech
         print(f"Generating speech using voice: '{voice}'...")
         # Available voices:
@@ -95,7 +99,12 @@ def text_to_speech(input_file, output_file="output.wav", voice="af_bella", play_
             
             # Create a file path - either temporary or permanent
             if save_audio:
-                segment_file = f"{os.path.splitext(output_file)[0]}_segment_{segment_index}.wav"
+                # Ensure segment files are saved to the same directory as the output file
+                output_dir = os.path.dirname(output_file)
+                output_basename = os.path.basename(output_file)
+                segment_basename = f"{os.path.splitext(output_basename)[0]}_segment_{segment_index}.wav"
+                segment_file = os.path.join(output_dir, segment_basename) if output_dir else segment_basename
+                
                 print(f"Saving segment to {segment_file}")
                 sf.write(segment_file, audio, sample_rate)
                 output_audio.append(segment_file)
@@ -136,7 +145,11 @@ def text_to_speech(input_file, output_file="output.wav", voice="af_bella", play_
                 # Leave the segments as individual files
                 print(f"Generated {len(output_audio)} audio segments as separate files.")
                 # Create a simple text file listing all segments
-                segments_list_file = f"{os.path.splitext(output_file)[0]}_segments.txt"
+                output_dir = os.path.dirname(output_file)
+                output_basename = os.path.basename(output_file)
+                segments_list_basename = f"{os.path.splitext(output_basename)[0]}_segments.txt"
+                segments_list_file = os.path.join(output_dir, segments_list_basename) if output_dir else segments_list_basename
+                
                 with open(segments_list_file, 'w') as f:
                     for segment in output_audio:
                         f.write(f"{segment}\n")

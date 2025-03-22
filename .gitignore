@@ -86,6 +86,10 @@ Thumbs.db
 *_segments.txt
 *.wav
 
+# Directories
+input/*
+output/*
+
 # Model files (can be large)
 *.pth
 *.pt

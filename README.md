@@ -13,6 +13,7 @@ AutoReader is a Python application that converts text files to speech using the 
 - Option to play audio without saving files to disk
 - Cross-platform audio playback support (Windows, macOS, Linux)
 - Efficient handling of long texts by processing in segments
+- **NEW: Folder-based workflow** for batch processing of multiple files
 
 ## Installation
 
@@ -32,25 +33,41 @@ pip install -r requirements.txt
    - Linux (Ubuntu): `sudo apt-get install espeak-ng`
    - macOS: `brew install espeak-ng`
 
+## Application Structure
+
+The application has a folder-based structure:
+
+- `input/` - Place text files here for batch processing
+- `output/` - Generated audio files are saved here
+
 ## Usage
 
 ### Basic Usage
 
 ```bash
-python main.py input.txt
+python main.py
 ```
 
-This will convert the text in `input.txt` to speech, save it as `output.wav`, and play it during generation.
+This will process all .txt files in the `input/` folder, generate speech, and save audio files to the `output/` folder.
+
+### Process a Specific File
+
+```bash
+python main.py path/to/your/file.txt
+```
+
+This will process the specified text file and save the audio to the `output/` folder.
 
 ### Command-line Options
 
 ```bash
-python main.py input.txt -o output.wav -v af_bella
+python main.py [input_file] -o output.wav -v af_bella
 ```
 
 #### Available Parameters:
 
-- `-o, --output`: Specify output filename (default: output.wav)
+- `input_file`: Path to a specific input .txt file (optional - if not provided, all files in the input folder are processed)
+- `-o, --output`: Specify output filename (default: input_filename.wav in the output folder)
 - `-v, --voice`: Specify voice to use (default: af_bella)
 - `-p, --play`: Play audio during generation (default: enabled)
 - `--no-play`: Disable audio playback
@@ -59,20 +76,40 @@ python main.py input.txt -o output.wav -v af_bella
 
 ### Usage Examples
 
+#### Process all files in the input folder:
+```bash
+python main.py
+```
+
+#### Process a specific file:
+```bash
+python main.py document.txt
+```
+
 #### Convert text and save audio without playback:
 ```bash
-python main.py input.txt --no-play
+python main.py document.txt --no-play
 ```
 
 #### Play text without saving files:
 ```bash
-python main.py input.txt --no-save
+python main.py document.txt --no-save
 ```
 
 #### Specify custom voice and output filename:
 ```bash
-python main.py input.txt -v am_michael -o michael_voice.wav
+python main.py document.txt -v am_michael -o output/michael_voice.wav
 ```
+
+## Folder-Based Workflow
+
+The application supports a folder-based workflow:
+
+1. **Input Folder**: Place your .txt files in the `input/` folder
+2. **Batch Processing**: Run `python main.py` without arguments to process all files
+3. **Output Folder**: Find generated audio files in the `output/` folder
+
+This workflow is useful for batch processing multiple files at once.
 
 ## Available Voices
 
@@ -103,6 +140,7 @@ AutoReader uses the following technologies:
   - Linux: Uses `playsound` library
 - **Segment processing**: Handles long texts by breaking them into logical segments
 - **Temporary file management**: Can operate in memory-only mode without saving files
+- **Folder-based architecture**: Organizes files in input and output directories
 
 ## Requirements
 
