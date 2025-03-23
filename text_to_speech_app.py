@@ -43,7 +43,7 @@ def play_audio(audio_file):
     
     return True
 
-def text_to_speech(input_file, output_file="output.wav", voice="af_bella", play_aloud=True, save_audio=True):
+def text_to_speech(input_file, output_file="output.wav", voice="af_bella", play_aloud=True, save_audio=True, speed=1.0):
     """
     Convert text from a file to speech using the Kokoro-82M model.
     
@@ -82,7 +82,7 @@ def text_to_speech(input_file, output_file="output.wav", voice="af_bella", play_
         generator = pipeline(
             text, 
             voice=voice,
-            speed=1,
+            speed=speed,
             split_pattern=r'\n+'
         )
         
@@ -188,4 +188,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     # Run the text-to-speech conversion
-    text_to_speech(args.input_file, args.output, args.voice, args.play, args.save) 
+    text_to_speech(args.input_file, args.output, args.voice, args.play, args.save, args.speed) 

@@ -11,11 +11,11 @@ import argparse
 import glob
 from text_to_speech_app import text_to_speech
 
-def process_file(input_file, output_file, voice, play_aloud, save_audio):
+def process_file(input_file, output_file, voice, play_aloud, save_audio, speed):
     """Process a single text file"""
     try:
         print(f"Processing file: {input_file}")
-        text_to_speech(input_file, output_file, voice, play_aloud, save_audio)
+        text_to_speech(input_file, output_file, voice, play_aloud, save_audio, speed)
         if save_audio:
             print(f"Success! Audio saved to {output_file}")
         else:
@@ -78,6 +78,13 @@ def parse_arguments():
         action="store_false",
         dest="save",
         help="Don't save audio files to disk, just play them"
+    )
+
+    parser.add_argument(
+        "-sp", "--speed", 
+        type=float,
+        default=1.0,
+        help="Speed of the speech. Default is 1.0 (normal speed)."
     )
     
     # Parse arguments
@@ -150,8 +157,8 @@ def main():
             output_file = os.path.join(output_dir, output_basename)
         
         # Process the single file
-        return process_file(args.input_file, output_file, args.voice, args.play, args.save)
-        
+        return process_file(args.input_file, output_file, args.voice, args.play, args.save, args.speed)
+       
     else:
         # Process all .txt files in the input directory
         input_files = glob.glob(os.path.join(input_dir, "*.txt"))
@@ -170,7 +177,7 @@ def main():
             output_basename = os.path.splitext(input_basename)[0] + ".wav"
             output_file = os.path.join(output_dir, output_basename)
             
-            file_result = process_file(input_file, output_file, args.voice, args.play, args.save)
+            file_result = process_file(input_file, output_file, args.voice, args.play, args.save,args.speed)
             if file_result != 0:
                 result = file_result
         

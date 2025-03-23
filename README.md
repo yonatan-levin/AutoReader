@@ -73,6 +73,7 @@ python main.py [input_file] -o output.wav -v af_bella
 - `--no-play`: Disable audio playback
 - `-s, --save`: Save audio files to disk (default: enabled)
 - `--no-save`: Don't save audio files, just play them
+- `-sp, --speed`: Set the speed of the speech (default: 1.0)
 
 ### Usage Examples
 
