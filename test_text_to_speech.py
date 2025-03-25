@@ -1,7 +1,8 @@
+import asyncio
 import unittest
 import os
 import time
-from text_to_speech_app import text_to_speech
+from text_to_speech_app import TextToSpeechProcessor
 
 class TestTextToSpeech(unittest.TestCase):
     def setUp(self):
@@ -16,7 +17,8 @@ class TestTextToSpeech(unittest.TestCase):
     def test_text_to_speech(self):
         try:
             # Test successful conversion
-            text_to_speech(self.test_file, self.output_file)
+            tts = TextToSpeechProcessor(self.test_file, self.output_file)
+            asyncio.run(tts.process())
             
             # Allow time for file to be created and closed
             time.sleep(1)

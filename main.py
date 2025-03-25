@@ -9,13 +9,17 @@ import os
 import sys
 import argparse
 import glob
-from text_to_speech_app import text_to_speech
+import asyncio
+from text_to_speech_app import TextToSpeechProcessor
 
 def process_file(input_file, output_file, voice, play_aloud, save_audio, speed):
     """Process a single text file"""
     try:
         print(f"Processing file: {input_file}")
-        text_to_speech(input_file, output_file, voice, play_aloud, save_audio, speed)
+        
+        tts = TextToSpeechProcessor(input_file, output_file, voice, play_aloud, save_audio, speed)
+        
+        asyncio.run(tts.process())
         if save_audio:
             print(f"Success! Audio saved to {output_file}")
         else:
